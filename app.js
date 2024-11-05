@@ -1,24 +1,3 @@
-require('dotenv').config()
-const express = require('express');
-const bodyParser = require('body-parser');
-const db = require('./db');
-
-
-const app = express();
-const port = 8888;
-
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-
-
-//Iniciamos el servidor.
-app.listen(port, () => {
-    console.log('Servidor iniciado en: http://localhost:' + port);
-});
-
-// Llamamos nuestras rutas
-app.use(require('./src-test/Routes/eventoRoutes'));
-
 // --------------------------------
 // iniciar sv con: npx nodemon app.js
 // --------------------------------
@@ -54,7 +33,26 @@ app.use(require('./src-test/Routes/eventoRoutes'));
 //#endregion
 // --------------------------------
 
+require('dotenv').config()
+const express = require('express');
+const bodyParser = require('body-parser');
+const db = require('./db');
 
+
+const app = express();
+const port = 8888;
+
+app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
+
+
+//Iniciamos el servidor.
+app.listen(port, () => {
+    console.log('Servidor iniciado en: http://localhost:' + port);
+});
+
+// Llamamos nuestras rutas
+app.use(require('./src-test/Routes/eventoRoutes'));
 
 // 404 Midelware
 // Middleware para manejar el error 404
