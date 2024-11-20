@@ -36,14 +36,22 @@
 require('dotenv').config()
 const express = require('express');
 const bodyParser = require('body-parser');
-const db = require('./db');
+const cors = require('cors');
 
 
 const app = express();
 const port = 8888;
 
+
+app.options('*', cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use((req, res, next) => {
+    res.header('Access-Control-Allow-Origin', 'http://localhost:8888');
+    res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+    res.header('Access-Control-Allow-Headers', 'Content-Type');
+    next();
+});
 
 
 //Iniciamos el servidor.
