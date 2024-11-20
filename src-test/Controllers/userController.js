@@ -22,7 +22,7 @@ exports.login = async(req, res) => {
 
             const playload = { 
                 ID: usuario.id, 
-                nombre: usuario.nombre, 
+                user: usuario, 
                 id_permissions: (usuario.id_permissions == '1') 
             };
 
@@ -41,7 +41,7 @@ exports.login = async(req, res) => {
             res.json({
                 success: true,
                 message: 'Inicio de sesión exitoso',
-                nombre: usuario.nombre,
+                user: usuario,
                 ID: usuario.id,
                 accessToken,
                 refreshToken
@@ -69,7 +69,7 @@ javascriptCopyexports.refreshToken = (req, res) => {
         const usuario = jwt.verify(token, process.env.JWT_REFRESH_TOKEN_SECRET);
         const payload = { 
             ID: usuario.ID, 
-            nombre: usuario.nombre, 
+            user: usuario,
             id_permissions: usuario.id_permissions 
         };
         
@@ -99,7 +99,7 @@ javascriptCopyexports.refreshToken = (req, res) => {
 exports.getUser = async (req, res) => {
     try {
         const userId = req.params.id;
-        const user = await this.getById(userId);
+        const user = await user.getById(userId);
         
         if (user) {
             res.status(200).json(user);
