@@ -3,36 +3,32 @@ const connection = require('../../db');
 const {formatToday} = require('../Helpers/dateHelper');
 const bcrypt = require('bcrypt')
 
+exports.create = async ({ nombre, email, contrasena }) => {
+    const contrasenaCrypt = await bcrypt.hash(contrasena, 10);
+    const query = `CALL createUser(?, ?, ?)`;
 
-
-exports.create = async( {nombre, email, contrasena} ) => {
-
-    const contrasena_crypt = await bcrypt.hash(contrasena, 10);
-
-    const query = `
-        INSERT INTO user(nombre, email, password, id_status, id_permissions)
-        VALUES(?, ?, ?)
-    `;
-
-    try{
-        await connection.query(query, [nombre, email, contrasena_crypt,1,1]);
-    }catch(error){
+    try {
+        await connection.query(query, [nombre, email, contrasenaCrypt]);
+        return { success: true, message: "Usuario registrado correctamente" };
+    } catch (error) {
+        if (error.sqlState === '45000') {
+            return { success: false, message: error.sqlMessage };
+        }
         throw error;
     }
-
-}
+};
 
 exports.login = async( {email, contrasena} ) => {
     const query = `
         SELECT id_user, nombre, email, password, id_permissions
-        FROM usuarios
+        FROM user
         WHERE email = ?
     `;
     try{
         [results] = await connection.query(query, [email]);
         if(results.length == 1){
             const usuario = results[0];
-            const is_contrasena = await bcrypt.compare(contrasena, usuario.contrasena);
+            const is_contrasena = await bcrypt.compare(contrasena, usuario.password);
             return (is_contrasena) ? usuario : null;
         }else{
             return null;
@@ -42,16 +38,14 @@ exports.login = async( {email, contrasena} ) => {
     }
 }
 
-exports.getById = async( {id} ) => {
+exports.getById = async (id) => { 
     const query = `
-        SELECT id_user, nombre, email, id_permissions
-        FROM usuarios
-        WHERE id_user = ?
+        CALL getUser(?);
     `;
-    try{
+    try {
         const [results] = await connection.query(query, [id]);
         return results.length > 0 ? results[0] : null;
-    }catch(error){
+    } catch (error) {
         throw error;
     }
 }

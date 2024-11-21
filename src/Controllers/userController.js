@@ -1,16 +1,22 @@
 const user = require("../Models/userModel");
 const jwt = require('jsonwebtoken');
 
-exports.register = async(req, res) => {
-    const {nombre, email, contrasena} = req.body;
-    try{
-        await user.create( {nombre, email, contrasena} );
-        res.json({ success: true, message: 'Usuario registrado correctamente'});
-    }catch(error){
-        console.log(error);
-        res.status(500).json({ success: false, message: 'Error al intentar registrar al usuario' });
+exports.register = async (req, res) => {
+    const { nombre, email, contrasena } = req.body;
+
+    try {
+        const result = await user.create({ nombre, email, contrasena });
+
+        if (result.success) {
+            res.json({ success: true, message: result.message });
+        } else {
+            res.status(400).json({ success: false, message: result.message });
+        }
+    } catch (error) {
+        console.error("Error al registrar usuario:", error);
+        res.status(500).json({ success: false, message: "Error al intentar registrar al usuario" });
     }
-}
+};
 
 exports.login = async(req, res) => {
     const {email, contrasena} = req.body;
@@ -54,7 +60,7 @@ exports.login = async(req, res) => {
     }
 }
 
-javascriptCopyexports.refreshToken = (req, res) => {
+exports.refreshToken = (req, res) => {
     const authHeader = req.headers.authorization;
     if (!authHeader) {
         return res.status(401).json({ success: false, message: 'Token de autenticación no proporcionado' });
@@ -99,14 +105,15 @@ javascriptCopyexports.refreshToken = (req, res) => {
 exports.getUser = async (req, res) => {
     try {
         const userId = req.params.id;
-        const user = await user.getById(userId);
+        const userData = await user.getById(userId);
         
-        if (user) {
-            res.status(200).json(user);
+        if (userData) {
+            res.status(200).json(userData);
         } else {
             res.status(404).json({ message: 'Usuario no encontrado' });
         }
     } catch (error) {
+        console.log("Error al obtener usuario:", error);
         res.status(500).json({ message: 'Error al obtener usuario', error: error.message });
     }
 }
