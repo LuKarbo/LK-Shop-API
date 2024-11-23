@@ -32,6 +32,8 @@ app.use('/user',require('./src/Routes/userRoutes'));
 app.use(require('./src/Routes/supportRoutes'));
 // Descuentos
 app.use(require('./src/Routes/discountRoutes'));
+// Grupos
+app.use(require('./src/Routes/groupRoutes'));
 
 
 
