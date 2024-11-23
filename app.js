@@ -30,6 +30,8 @@ app.listen(port, () => {
 app.use('/user',require('./src/Routes/userRoutes'));
 // Consultas/Support
 app.use(require('./src/Routes/supportRoutes'));
+// Descuentos
+app.use(require('./src/Routes/discountRoutes'));
 
 
 

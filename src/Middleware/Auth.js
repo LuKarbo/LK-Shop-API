@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 
-exports.requireAuth = (req, res, next) => {
+exports.requireAuth = async (req, res, next) => {
     try {
         const authHeader = req.headers.authorization;
         
@@ -20,9 +20,20 @@ exports.requireAuth = (req, res, next) => {
             });
         }
 
-        const decodedToken = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
-        req.user = decodedToken;
-        next();
+        try {
+            const decodedToken = jwt.verify(token, process.env.JWT_ACCESS_TOKEN_SECRET);
+            req.user = decodedToken;
+            next();
+        } catch (error) {
+            if (error.name === 'TokenExpiredError') {
+                return res.status(401).json({ 
+                    success: false, 
+                    message: 'Token de autenticación expirado',
+                    error: 'TOKEN_EXPIRED'
+                });
+            }
+            throw error;
+        }
     } catch (error) {
         return res.status(401).json({ 
             success: false, 

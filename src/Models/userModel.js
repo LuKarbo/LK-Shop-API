@@ -1,6 +1,5 @@
 
 const connection = require('../../db');
-const {formatToday} = require('../Helpers/dateHelper');
 const bcrypt = require('bcrypt')
 
 exports.create = async ({ nombre, email, contrasena }) => {
