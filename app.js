@@ -26,8 +26,10 @@ app.listen(port, () => {
     console.log('Servidor iniciado en: http://localhost:' + port);
 });
 
-// Llamamos nuestras rutas
-app.use(require('./src/Routes/userRoutes'));
+// User
+app.use('/user',require('./src/Routes/userRoutes'));
+// Consultas/Support
+app.use(require('./src/Routes/supportRoutes'));
 
 
 

@@ -117,3 +117,56 @@ exports.getUser = async (req, res) => {
         res.status(500).json({ message: 'Error al obtener usuario', error: error.message });
     }
 }
+
+exports.editUser = async (req, res) => {
+    const { id } = req.params;
+    const { nombre, email, id_permissions, id_status, profileIMG, profileBanner } = req.body;
+
+    if (!nombre && !email && !id_permissions && !id_status && !profileIMG && !profileBanner) {
+        return res.status(400).json({
+            success: false,
+            message: 'No se proporcionaron datos para actualizar'
+        });
+    }
+
+    try {
+        const userExists = await user.getById(id);
+        if (!userExists) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        const result = await user.editUser(
+            id,
+            nombre,
+            email,
+            id_permissions,
+            id_status,
+            profileIMG,
+            profileBanner
+        );
+
+        if (result.success) {
+            const updatedUser = await user.getById(id);
+            return res.status(200).json({
+                success: true,
+                message: result.message,
+                user: updatedUser
+            });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: result.message
+            });
+        }
+    } catch (error) {
+        console.error('Error al actualizar usuario:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error al actualizar usuario',
+            error: error.message
+        });
+    }
+};

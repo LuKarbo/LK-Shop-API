@@ -49,3 +49,39 @@ exports.getById = async (id) => {
         throw error;
     }
 }
+
+exports.editUser = async (id, nombre, email, id_permissions, id_status, profileIMG, profileBanner) => {
+    const query = `CALL EditUser(?, ?, ?, ?, ?, ?, ?)`;
+
+    try {
+        const [results] = await connection.query(query, [
+            id,
+            nombre || null,
+            email || null,
+            id_permissions || null,
+            id_status || null,
+            profileIMG || null,
+            profileBanner || null
+        ]);
+
+        const rowsAffected = results[0][0].rows_affected;
+        
+        if (rowsAffected === 0) {
+            return {
+                success: false,
+                message: "No se encontró el usuario o no se realizaron cambios"
+            };
+        }
+
+        return {
+            success: true,
+            message: "Usuario actualizado correctamente",
+            rowsAffected
+        };
+    } catch (error) {
+        if (error.sqlState === '45000') {
+            return { success: false, message: error.sqlMessage };
+        }
+        throw new Error(`Error al actualizar usuario: ${error.message}`);
+    }
+};
