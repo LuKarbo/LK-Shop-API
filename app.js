@@ -38,6 +38,8 @@ app.use(require('./src/Routes/groupRoutes'));
 app.use(require('./src/Routes/gameRoutes'));
 // UserActions (Purchase + Libreria)
 app.use(require('./src/Routes/userActivityRoutes'));
+// reviews
+app.use(require('./src/Routes/reviewRoutes'));
 
 
 // 404 Midelware
