@@ -34,6 +34,8 @@ app.use(require('./src/Routes/supportRoutes'));
 app.use(require('./src/Routes/discountRoutes'));
 // Grupos
 app.use(require('./src/Routes/groupRoutes'));
+// Games
+app.use(require('./src/Routes/gameRoutes'));
 
 
 
