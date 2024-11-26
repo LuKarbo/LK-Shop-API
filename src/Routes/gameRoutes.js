@@ -4,7 +4,7 @@ const gameController = require("../Controllers/gameController");
 const { requireAuth } = require("../Middleware/Auth");
 
 router.get('/games/user/:userId', requireAuth, gameController.getUserGames);
-router.get('/games', requireAuth, gameController.getAllGames);
+router.get('/games', gameController.getAllGames);
 router.post('/games', requireAuth, gameController.createGame);
 router.put('/games/:id', requireAuth, gameController.editGame);
 router.delete('/games/:id', requireAuth, gameController.deleteGame);
