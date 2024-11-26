@@ -37,6 +37,18 @@ exports.login = async( {email, contrasena} ) => {
     }
 }
 
+exports.getUsers = async () => { 
+    const query = `
+        CALL getAllUser();
+    `;
+    try {
+        const [results] = await connection.query(query);
+        return results.length > 0 ? results : null;
+    } catch (error) {
+        throw error;
+    }
+}
+
 exports.getById = async (id) => { 
     const query = `
         CALL getUser(?);

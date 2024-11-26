@@ -102,6 +102,16 @@ exports.refreshToken = (req, res) => {
 }
 
 //Ruta protegida
+exports.getUsers = async (req, res) => {
+    try {
+        const users = await user.getUsers();
+        res.status(200).json(users);
+    } catch (error) {
+        console.log("Error al obtener los usuarios:", error);
+        res.status(500).json({ message: 'Error al obtener los usuarios', error: error.message });
+    }
+}
+
 exports.getUser = async (req, res) => {
     try {
         const userId = req.params.id;
