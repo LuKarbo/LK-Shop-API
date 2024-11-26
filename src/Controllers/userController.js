@@ -5,7 +5,7 @@ exports.register = async (req, res) => {
     const { nombre, email, contrasena } = req.body;
 
     try {
-        const result = await user.create({ nombre, email, contrasena });
+        const result = await user.create( nombre, email, contrasena );
 
         if (result.success) {
             res.json({ success: true, message: result.message });
@@ -19,9 +19,9 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async(req, res) => {
-    const {email, contrasena} = req.body;
+    const {email, password} = req.body;
     try{
-        const usuario = await user.login( {email, contrasena} );
+        const usuario = await user.login( email, password );
         if(usuario == null){
             res.json({ success: false, message: 'Credenciales incorrectas' });
         }else{
@@ -115,16 +115,25 @@ exports.getUsers = async (req, res) => {
 exports.getUser = async (req, res) => {
     try {
         const userId = req.params.id;
+        console.log('ID solicitado:', userId);
+        
         const userData = await user.getById(userId);
+        console.log('Datos del usuario obtenidos:', userData);
         
         if (userData) {
+            console.log('Enviando respuesta exitosa');
             res.status(200).json(userData);
         } else {
+            console.log('Usuario no encontrado');
             res.status(404).json({ message: 'Usuario no encontrado' });
         }
     } catch (error) {
-        console.log("Error al obtener usuario:", error);
-        res.status(500).json({ message: 'Error al obtener usuario', error: error.message });
+        console.error("Error completo:", error);
+        res.status(500).json({ 
+            message: 'Error al obtener usuario', 
+            error: error.message,
+            stack: error.stack
+        });
     }
 }
 

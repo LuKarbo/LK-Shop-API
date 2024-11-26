@@ -2,7 +2,10 @@
 const connection = require('../../db');
 const bcrypt = require('bcrypt')
 
-exports.create = async ({ nombre, email, contrasena }) => {
+exports.create = async ( nombre, email, contrasena ) => {
+    console.log(nombre);
+    console.log(email);
+    console.log(contrasena);
     const contrasenaCrypt = await bcrypt.hash(contrasena, 10);
     const query = `CALL createUser(?, ?, ?)`;
 
@@ -17,22 +20,31 @@ exports.create = async ({ nombre, email, contrasena }) => {
     }
 };
 
-exports.login = async( {email, contrasena} ) => {
+exports.login = async (email, password) => {    
     const query = `
         SELECT id_user, nombre, email, password, id_permissions
         FROM user
         WHERE email = ?
     `;
-    try{
-        [results] = await connection.query(query, [email]);
-        if(results.length == 1){
-            const usuario = results[0];
-            const is_contrasena = await bcrypt.compare(contrasena, usuario.password);
-            return (is_contrasena) ? usuario : null;
-        }else{
+    
+    try {
+        const [results] = await connection.query(query, [email]);
+        
+        if (results.length === 0) {
             return null;
         }
-    }catch(error){
+        
+        const usuario = results[0];
+        
+        if (!password || !usuario.password) {
+            throw new Error('Password or hash is missing');
+        }
+        
+        const isValidPassword = await bcrypt.compare(password, usuario.password);
+        
+        return isValidPassword ? usuario : null;
+    } catch (error) {
+        console.error('Error en login:', error);
         throw error;
     }
 }
