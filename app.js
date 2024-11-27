@@ -40,6 +40,8 @@ app.use(require('./src/Routes/gameRoutes'));
 app.use(require('./src/Routes/userActivityRoutes'));
 // reviews
 app.use(require('./src/Routes/reviewRoutes'));
+// editores y categorias
+app.use(require('./src/Routes/editorCategoryRoutes'));
 
 
 // 404 Midelware
