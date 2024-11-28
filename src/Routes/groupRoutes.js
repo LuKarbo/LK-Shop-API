@@ -3,7 +3,7 @@ const router = express.Router();
 const groupController = require("../Controllers/groupController");
 const { requireAuth } = require("../Middleware/Auth");
 
-router.get('/groups', requireAuth, groupController.getAllGroups);
+router.get('/groups', groupController.getAllGroups);
 router.get('/groups/user/:userId', requireAuth, groupController.getUserGroups);
 router.get('/groups/:groupId/messages', requireAuth, groupController.getGroupMessages);
 router.post('/groups', requireAuth, groupController.createGroup);

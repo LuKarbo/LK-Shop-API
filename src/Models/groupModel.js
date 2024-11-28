@@ -1,7 +1,7 @@
 const connection = require('../../db');
 
 exports.getAllGroups = async () => {
-    const query = `CALL GetGroupsWithMemberCount();`;
+    const query = `CALL GetGroupsWithDetails();`;
     try {
         const [results] = await connection.query(query);
         return results[0] || [];
@@ -30,10 +30,10 @@ exports.getGroupMessages = async (groupId) => {
     }
 };
 
-exports.createGroup = async (name, groupImg, groupBanner, ownerId) => {
-    const query = `CALL CreateGroup(?, ?, ?, ?);`;
+exports.createGroup = async (name, description, groupBanner, ownerId, categories = '') => {
+    const query = `CALL CreateGroup(?, ?, ?, ?, ?);`;
     try {
-        const [result] = await connection.query(query, [name, groupImg, groupBanner, ownerId]);
+        const [result] = await connection.query(query, [name, description, groupBanner, ownerId, categories]);
         return {
             success: true,
             message: "Grupo creado correctamente",
@@ -70,10 +70,10 @@ exports.leaveGroup = async (userId, groupId) => {
     }
 };
 
-exports.editGroup = async (groupId, name, groupImg, groupBanner) => {
-    const query = `CALL EditGroup(?, ?, ?, ?);`;
+exports.editGroup = async (groupId, name, description, groupBanner, categories = '') => {
+    const query = `CALL EditGroup(?, ?, ?, ?, ?);`;
     try {
-        await connection.query(query, [groupId, name, groupImg, groupBanner]);
+        await connection.query(query, [groupId, name, description, groupBanner, categories]);
         return {
             success: true,
             message: "Grupo actualizado correctamente"
