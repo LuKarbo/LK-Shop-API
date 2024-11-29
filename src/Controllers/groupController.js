@@ -52,7 +52,7 @@ exports.getGroupMessages = async (req, res) => {
 
 exports.createGroup = async (req, res) => {
     try {
-        const { name, groupImg, groupBanner, ownerId } = req.body;
+        const { name, description, groupBanner, ownerId, categories } = req.body;
 
         if (!name || !ownerId) {
             return res.status(400).json({
@@ -61,7 +61,7 @@ exports.createGroup = async (req, res) => {
             });
         }
 
-        const result = await group.createGroup(name, groupImg, groupBanner, ownerId);
+        const result = await group.createGroup(name, description, groupBanner, ownerId, categories);
         return res.status(201).json({
             success: true,
             message: 'Grupo creado correctamente',

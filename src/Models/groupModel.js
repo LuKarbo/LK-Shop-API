@@ -30,7 +30,7 @@ exports.getGroupMessages = async (groupId) => {
     }
 };
 
-exports.createGroup = async (name, description, groupBanner, ownerId, categories = '') => {
+exports.createGroup = async (name, description, groupBanner, ownerId, categories) => {
     const query = `CALL CreateGroup(?, ?, ?, ?, ?);`;
     try {
         const [result] = await connection.query(query, [name, description, groupBanner, ownerId, categories]);
