@@ -73,14 +73,15 @@ exports.getById = async (id) => {
     }
 }
 
-exports.editUser = async (id, nombre, email, id_permissions, id_status, profileIMG, profileBanner) => {
-    const query = `CALL EditUser(?, ?, ?, ?, ?, ?, ?)`;
+exports.editUser = async (id, nombre, email, bio, id_permissions, id_status, profileIMG, profileBanner) => {
+    const query = `CALL EditUser(?, ?, ?, ?, ?, ?, ?, ?)`;
 
     try {
         const [results] = await connection.query(query, [
             id,
             nombre || null,
             email || null,
+            bio || null,
             id_permissions || null,
             id_status || null,
             profileIMG || null,

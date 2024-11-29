@@ -139,9 +139,9 @@ exports.getUser = async (req, res) => {
 
 exports.editUser = async (req, res) => {
     const { id } = req.params;
-    const { nombre, email, id_permissions, id_status, profileIMG, profileBanner } = req.body;
+    const { nombre, email, bio, id_permissions, id_status, profileIMG, profileBanner } = req.body;
 
-    if (!nombre && !email && !id_permissions && !id_status && !profileIMG && !profileBanner) {
+    if (!nombre && !email && !bio && !id_permissions && !id_status && !profileIMG && !profileBanner) {
         return res.status(400).json({
             success: false,
             message: 'No se proporcionaron datos para actualizar'
@@ -161,6 +161,7 @@ exports.editUser = async (req, res) => {
             id,
             nombre,
             email,
+            bio,
             id_permissions,
             id_status,
             profileIMG,
