@@ -20,7 +20,6 @@ exports.getUserReviews = async (req, res) => {
     try {
         const { userId } = req.params;
         const reviewData = await review.getUserReviews(userId);
-
         if (!reviewData.length) {
             return res.status(404).json({
                 success: false,

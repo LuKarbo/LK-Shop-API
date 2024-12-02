@@ -135,16 +135,16 @@ exports.leaveGroup = async (req, res) => {
 exports.editGroup = async (req, res) => {
     try {
         const { groupId } = req.params;
-        const { name, groupImg, groupBanner } = req.body;
+        const { name, description, groupBanner, categories} = req.body;
 
-        if (!name && !groupImg && !groupBanner) {
+        if (!name && !description && !groupBanner && !categories) {
             return res.status(400).json({
                 success: false,
                 message: 'Se requiere al menos un campo para actualizar'
             });
         }
 
-        const result = await group.editGroup(groupId, name, groupImg, groupBanner);
+        const result = await group.editGroup(groupId, name, description, groupBanner, categories);
         return res.status(200).json({
             success: true,
             message: 'Grupo actualizado correctamente',
