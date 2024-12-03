@@ -27,16 +27,13 @@ exports.getAllGames = async () => {
 };
 
 exports.createGame = async ({
-    nombre, descripcion, gameBanner, fecha_lanzamiento,
-    precio, descuento, puntaje, id_editor,
-    copias_disponibles, copias_cantidad
+    titulo, descripcion, banner, fecha, precio, discount_id, puntaje, editor_id, copias_disponibles, total_copias, categorias
 }) => {
-    const query = `CALL CreateNewGame(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const query = `CALL CreateNewGame(?,?,?,?,?,?,?,?,?,?,?)`;
     try {
+        const categoriasStr = categorias.join(',');
         const [result] = await connection.query(query, [
-            nombre, descripcion, gameBanner, fecha_lanzamiento,
-            precio, descuento, puntaje, id_editor,
-            copias_disponibles, copias_cantidad
+            titulo, descripcion, banner, fecha, precio, discount_id, puntaje, editor_id, copias_disponibles, total_copias, categoriasStr
         ]);
         return {
             success: true,
@@ -47,6 +44,7 @@ exports.createGame = async ({
         throw new Error(`Error al crear el juego: ${error.message}`);
     }
 };
+
 
 exports.editGame = async (
     id, nombre, descripcion, gameBanner, fecha_lanzamiento,

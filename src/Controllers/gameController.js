@@ -37,13 +37,13 @@ exports.getAllGames = async (req, res) => {
 
 exports.createGame = async (req, res) => {
     const {
-        nombre, descripcion, gameBanner, fecha_lanzamiento, 
-        precio, descuento, puntaje, id_editor, 
-        copias_disponibles, copias_cantidad
+        titulo, descripcion, banner, fecha, precio, discount_id, puntaje, 
+        editor_id, copias_disponibles, total_copias, categorias
     } = req.body;
 
-    if (!nombre || !descripcion || !fecha_lanzamiento || !precio || 
-        !id_editor || !copias_disponibles || !copias_cantidad) {
+    if (!titulo || !descripcion || !precio || !puntaje || 
+        !editor_id || !copias_disponibles || !total_copias || 
+        !categorias) {
         return res.status(400).json({
             success: false,
             message: 'Todos los campos obligatorios deben ser proporcionados'
@@ -52,9 +52,7 @@ exports.createGame = async (req, res) => {
 
     try {
         const result = await game.createGame({
-            nombre, descripcion, gameBanner, fecha_lanzamiento,
-            precio, descuento, puntaje, id_editor,
-            copias_disponibles, copias_cantidad
+            titulo, descripcion, banner, fecha, precio, discount_id, puntaje, editor_id, copias_disponibles, total_copias, categorias
         });
         return res.status(201).json(result);
     } catch (error) {
