@@ -47,16 +47,13 @@ exports.createGame = async ({
 
 
 exports.editGame = async (
-    id, nombre, descripcion, gameBanner, fecha_lanzamiento,
-    precio, descuento, puntaje, id_editor,
-    copias_disponibles, copias_cantidad
+    id, titulo, descripcion, banner, fecha, precio, discount_id, puntaje, editor_id, copias_disponibles, total_copias, categorias
 ) => {
-    const query = `CALL EditGame(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+    const query = `CALL EditGame(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
     try {
+        const categoriasStr = categorias.join(',');
         const [result] = await connection.query(query, [
-            id, nombre, descripcion, gameBanner, fecha_lanzamiento,
-            precio, descuento, puntaje, id_editor,
-            copias_disponibles, copias_cantidad
+            id, titulo, descripcion, banner, fecha, precio, discount_id, puntaje, editor_id, copias_disponibles, total_copias, categoriasStr
         ]);
         return {
             success: true,

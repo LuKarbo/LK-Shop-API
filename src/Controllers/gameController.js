@@ -40,10 +40,11 @@ exports.createGame = async (req, res) => {
         titulo, descripcion, banner, fecha, precio, discount_id, puntaje, 
         editor_id, copias_disponibles, total_copias, categorias
     } = req.body;
-
-    if (!titulo || !descripcion || !precio || !puntaje || 
+    
+    if (!titulo || !descripcion || !precio || !puntaje || !fecha ||
         !editor_id || !copias_disponibles || !total_copias || 
         !categorias) {
+            console.log("Todos los campos obligatorios deben ser proporcionados");
         return res.status(400).json({
             success: false,
             message: 'Todos los campos obligatorios deben ser proporcionados'
@@ -67,13 +68,13 @@ exports.createGame = async (req, res) => {
 exports.editGame = async (req, res) => {
     const { id } = req.params;
     const {
-        nombre, descripcion, gameBanner, fecha_lanzamiento,
-        precio, descuento, puntaje, id_editor,
-        copias_disponibles, copias_cantidad
+        titulo, descripcion, banner, fecha, precio, discount_id, puntaje, editor_id, copias_disponibles, total_copias, categorias
     } = req.body;
 
-    if (!nombre || !descripcion || !fecha_lanzamiento || !precio ||
-        !id_editor || !copias_disponibles || !copias_cantidad) {
+    if (!titulo || !descripcion || !precio || !puntaje || !fecha ||
+        !editor_id || !copias_disponibles || !total_copias || 
+        !categorias) {
+            console.log("Todos los campos obligatorios deben ser proporcionados");
         return res.status(400).json({
             success: false,
             message: 'Todos los campos obligatorios deben ser proporcionados'
@@ -82,9 +83,7 @@ exports.editGame = async (req, res) => {
 
     try {
         const result = await game.editGame(
-            id, nombre, descripcion, gameBanner, fecha_lanzamiento,
-            precio, descuento, puntaje, id_editor,
-            copias_disponibles, copias_cantidad
+            id, titulo, descripcion, banner, fecha, precio, discount_id, puntaje, editor_id, copias_disponibles, total_copias, categorias
         );
         return res.status(200).json(result);
     } catch (error) {
