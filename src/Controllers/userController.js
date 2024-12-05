@@ -112,6 +112,26 @@ exports.getUsers = async (req, res) => {
     }
 }
 
+exports.GetAllPermissions = async (req, res) => {
+    try {
+        const users = await user.GetAllPermissions();
+        res.status(200).json(users);
+    } catch (error) {
+        console.log("Error al obtener los permisos:", error);
+        res.status(500).json({ message: 'Error al obtener los permisos', error: error.message });
+    }
+}
+
+exports.GetAllStatuses = async (req, res) => {
+    try {
+        const users = await user.GetAllStatuses();
+        res.status(200).json(users);
+    } catch (error) {
+        console.log("Error al obtener los status:", error);
+        res.status(500).json({ message: 'Error al obtener los status', error: error.message });
+    }
+}
+
 exports.getUser = async (req, res) => {
     try {
         const userId = req.params.id;
@@ -186,6 +206,70 @@ exports.editUser = async (req, res) => {
         return res.status(500).json({
             success: false,
             message: 'Error al actualizar usuario',
+            error: error.message
+        });
+    }
+};
+
+
+exports.AdminEditUser = async (req, res) => {
+    const { id } = req.params;
+    const { nombre, email, id_permissions, id_status } = req.body;
+
+    if (!nombre && !email && !id_permissions && !id_status ) {
+        return res.status(400).json({
+            success: false,
+            message: 'No se proporcionaron datos para actualizar'
+        });
+    }
+
+    try {
+        const userExists = await user.getById(id);
+        if (!userExists) {
+            return res.status(404).json({
+                success: false,
+                message: 'Usuario no encontrado'
+            });
+        }
+
+        const result = await user.AdminEditUser(
+            id,
+            nombre, email, id_permissions, id_status
+        );
+
+        if (result.success) {
+            return res.status(200).json({
+                success: true,
+                message: result.message
+            });
+        } else {
+            return res.status(400).json({
+                success: false,
+                message: result.message
+            });
+        }
+    } catch (error) {
+        console.error('Error al actualizar usuario:', error);
+        return res.status(500).json({
+            success: false,
+            message: 'Error al actualizar usuario',
+            error: error.message
+        });
+    }
+};
+
+exports.DeleteUser = async (req, res) => {
+    try {
+        const { userId } = req.params;
+        await user.DeleteUser(userId);
+        return res.status(200).json({
+            success: true,
+            message: 'Usuario eliminado correctamente'
+        });
+    } catch (error) {
+        return res.status(500).json({
+            success: false,
+            message: 'Error al eliminar el Usuario',
             error: error.message
         });
     }

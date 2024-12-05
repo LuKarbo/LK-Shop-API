@@ -22,7 +22,7 @@ exports.create = async ( nombre, email, contrasena ) => {
 
 exports.login = async (email, password) => {    
     const query = `
-        SELECT id_user, nombre, email, password, id_permissions
+        SELECT id_user, nombre, email, password, id_permissions, id_status
         FROM user
         WHERE email = ?
     `;
@@ -52,6 +52,30 @@ exports.login = async (email, password) => {
 exports.getUsers = async () => { 
     const query = `
         CALL getAllUser();
+    `;
+    try {
+        const [results] = await connection.query(query);
+        return results.length > 0 ? results : null;
+    } catch (error) {
+        throw error;
+    }
+}
+
+exports.GetAllPermissions = async () => { 
+    const query = `
+        CALL GetAllPermissions();
+    `;
+    try {
+        const [results] = await connection.query(query);
+        return results.length > 0 ? results : null;
+    } catch (error) {
+        throw error;
+    }
+}
+
+exports.GetAllStatuses = async () => { 
+    const query = `
+        CALL GetAllStatuses();
     `;
     try {
         const [results] = await connection.query(query);
@@ -107,5 +131,56 @@ exports.editUser = async (id, nombre, email, bio, id_permissions, id_status, pro
             return { success: false, message: error.sqlMessage };
         }
         throw new Error(`Error al actualizar usuario: ${error.message}`);
+    }
+};
+
+exports.AdminEditUser = async (id, nombre, email, id_permissions, id_status) => {
+    const query = `CALL AdminEditUser(?, ?, ?, ?, ?)`;
+
+    try {
+        const [results] = await connection.query(query, [
+            id,
+            nombre || null,
+            email || null,
+            id_permissions || null,
+            id_status || null
+        ]);
+
+        const rowsAffected = results[0][0].rows_affected;
+        
+        if (rowsAffected === 0) {
+            return {
+                success: false,
+                message: "No se encontró el usuario o no se realizaron cambios"
+            };
+        }
+
+        return {
+            success: true,
+            message: "Usuario actualizado correctamente",
+            rowsAffected
+        };
+    } catch (error) {
+        if (error.sqlState === '45000') {
+            return { success: false, message: error.sqlMessage };
+        }
+        throw new Error(`Error al actualizar usuario: ${error.message}`);
+    }
+};
+
+exports.DeleteUser = async (id) => {
+    const query = `CALL DeleteUser(?)`;
+    try {
+        const [result] = await connection.query(query, [id]);
+        return {
+            success: true,
+            message: "Usuario eliminado correctamente",
+            data: result[0]
+        };
+    } catch (error) {
+        if (error.sqlState === '45000') {
+            throw new Error(error.sqlMessage);
+        }
+        throw new Error(`Error al eliminar el juego: ${error.message}`);
     }
 };
