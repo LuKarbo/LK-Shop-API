@@ -1,45 +1,55 @@
-# API con Nodemon
+# 🚀 LK-Shop-API  
 
-Este proyecto utiliza **Nodemon** para facilitar el desarrollo, reiniciando automáticamente el servidor cada vez que se detectan cambios en el código.
+**LK-Shop-API** es una API desarrollada para integrarse con **LK-Shop-React**, facilitando la comunicación entre la aplicación web y la base de datos en tiempo real.  
 
-## Requisitos
+Este proyecto permite gestionar las consultas y la conexión con la base de datos de forma separada del código principal, garantizando una arquitectura más limpia y mantenible.  
 
-- **Node.js** instalado. Puedes descargarlo desde: [Node.js](https://nodejs.org/).
+Para todas las funcionalidades que requieren autenticación, se utiliza **REFRESH-TOKEN** para evitar el acceso no autorizado a los endpoints.  
 
-## Instalación
+## ⚙️ Funcionalidades Principales  
 
-1. Asegúrate de estar en la carpeta del proyecto.  
-2. Instala `nodemon` como dependencia de desarrollo:
+### 🔹 Usuarios (`/user`)  
+✅ Registro e inicio de sesión (`POST /register`, `POST /login`).  
+✅ Obtener información del usuario (`GET /getUser`, `GET /getUser/:id`).  
+✅ Gestión de permisos y estado (`GET /permissions`, `GET /status`).  
+✅ Edición de perfil (`PUT /getUser/:id/edit`).  
+✅ Edición administrativa (`PUT /getUser/:id/adminEdit`).  
+✅ Eliminación de usuario (`DELETE /getUser/:id/delete`).  
+✅ Renovación de sesión (`GET /refresh-token`).  
 
-```bash
-npm install --save-dev nodemon  
-```
+### 🔹 Actividades (`/activities`)  
+✅ Historial de compras (`GET /purchases`, `GET /purchases/:userId`).  
+✅ Compra y reembolso (`POST /purchase`, `POST /refund`).  
 
-## Uso
+### 🔹 Soporte (`/support`)  
+✅ Obtener solicitudes de soporte (`GET /support`, `GET /support/:id`).  
+✅ Crear solicitudes y responder (`POST /support`, `POST /support/:id/reply`).  
 
-Para iniciar el servidor, ejecuta el siguiente comando:
+### 🔹 Reseñas (`/review`)  
+✅ Obtener y crear reseñas (`GET /review`, `GET /review/user/:userId`, `POST /review`).  
 
-```bash
-npx nodemon app.js  
-```
+### 🔹 Grupos (`/groups`)  
+✅ Gestión de grupos (`GET /groups`, `GET /groups/user/:userId`).  
+✅ Mensajería en grupos (`GET /groups/:groupId/messages`, `POST /groups/:groupId/messages`).  
+✅ Creación y administración de grupos (`POST /groups`, `PUT /groups/:groupId`, `DELETE /groups/:groupId`).  
+✅ Unirse o salir de un grupo (`POST /groups/:groupId/join`, `PUT /groups/:groupId/leave`).  
 
-Este comando lanzará el servidor y lo reiniciará cada vez que hagas cambios en los archivos del proyecto.
+### 🔹 Juegos (`/games`)  
+✅ Gestión de juegos (`GET /games`, `POST /games`, `PUT /games/:id`, `DELETE /games/:id`).  
+✅ Juegos de un usuario (`GET /games/user/:userId`).  
+✅ Favoritos (`GET /favorites/:userId`, `POST /favorites`, `DELETE /favorites/:userId/:gameId`).  
 
-## Opcional: Script en `package.json`
+### 🔹 Categorías y Editores (`/categories` - `/editors`)  
+✅ Obtener categorías (`GET /categories`).  
+✅ Obtener editores (`GET /editors`).  
 
-Si prefieres facilitar el inicio del servidor, añade un script en el archivo `package.json`:
+### 🔹 Descuentos (`/discount`)  
+✅ Gestión de descuentos (`GET /discount`, `GET /discount/:id`, `POST /discount`, `PUT /discount/:id/edit`).  
 
-```json
-{
-    "scripts": {
-        "dev": "npx nodemon app.js"
-    }
-}  
-```
+## 🛠️ Tecnologías Utilizadas  
+- **Node.js** 
+- **Express** 
+- **SQL**  
 
-Ahora, en lugar de escribir el comando completo, puedes iniciar el servidor con:
-
-```bash
-npm run dev  
-```
----
+## 👨‍💻 Autor  
+🔹 **Lucas Karbo**  
